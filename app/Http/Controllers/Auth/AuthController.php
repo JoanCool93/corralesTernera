@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use Auth;
 use Validator;
+use App\Usuario;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class AuthController extends Controller
 {
@@ -21,20 +23,23 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesUsers, ThrottlesLogins;
 
     /**
      * Where to redirect users after login / registration.
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/panelUsuario';
 
     /**
      * Create a new authentication controller instance.
      *
      * @return void
      */
+
+    //private $usuario = Usuario::newInstance();
+
     public function __construct()
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
@@ -49,8 +54,10 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'nombre' => 'required|max:255',
+            'apellidoPaterno' => 'required|max:255',
+            'apellidoMaterno' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:usuarios',
             'password' => 'required|min:6|confirmed',
         ]);
     }
@@ -63,10 +70,27 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+        return Usuario::create([
+            'nombre'            => $data['nombre'],
+            'apellidoPaterno'   => $data['apellidoPaterno'],
+            'apellidoMaterno'   => $data['apellidoMaterno'],
+            'email'             => $data['email'],
+            'password'          => bcrypt($data['password']),
+            'idRole'            => 4,
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $validator = $this->validator($request->all());
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+        //Auth::guard($this->getGuard())->login($this->create($request->all()));
+        Auth::guard($this->getGuard());
+        $this->create($request->all());
+        return;
     }
 }

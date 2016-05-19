@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Mazatlan',
 
     /*
     |--------------------------------------------------------------------------
@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -122,7 +122,11 @@ return [
     */
 
     'providers' => [
-
+        /*
+         * Service Providers Agregados
+         */
+        Collective\Html\HtmlServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         /*
          * Laravel Framework Service Providers...
          */
@@ -170,7 +174,16 @@ return [
     */
 
     'aliases' => [
+        /*
+         * Service Providers' Aliases Agregados
+         */
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
+        /*
+         * Laravel Framework Service Providers Aliases...
+         */
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
