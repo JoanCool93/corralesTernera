@@ -80,7 +80,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(Request $request)
+/*    public function register(Request $request)
     {
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
@@ -92,5 +92,5 @@ class AuthController extends Controller
         Auth::guard($this->getGuard());
         $this->create($request->all());
         return;
-    }
+    }*/
 }

@@ -85,7 +85,7 @@ class UsuariosController extends Controller
         return Redirect::route('usuarios.index');
     }
 
-    public function register(Request $request)
+/*    public function register(Request $request)
     {
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
@@ -95,5 +95,5 @@ class UsuariosController extends Controller
         }
         $this->create($request->all());
         return redirect($this->redirectPath());
-    }
+    }*/
 }
