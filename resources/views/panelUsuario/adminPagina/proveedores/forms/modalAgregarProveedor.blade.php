@@ -14,7 +14,6 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-6">
-                            {!! Form::open(['route' => 'proveedores.store', 'method' => 'POST', 'class' => 'form']) !!}
                             @include('panelUsuario.adminPagina.proveedores.forms.formularioProveedor')
                         </div>
                     </div>

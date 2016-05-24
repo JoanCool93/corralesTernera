@@ -132,5 +132,4 @@ class Proveedor extends Model
     public static function eliminar($id){
         Proveedor::destroy($id);
     }
-
 }

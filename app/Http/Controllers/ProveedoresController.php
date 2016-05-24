@@ -40,11 +40,25 @@ class ProveedoresController extends Controller
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha registrado exitosamente el proveedor');
             // Redireccionmiento.
-            return Redirect::route('proveedores.index');
+            if(Auth::user()->idRole == 2){
+                return Redirect::route('proveedores.index');
+            }
+            else{
+                return Redirect::route('inicioRegistro');
+            }
         } else {
-            return Redirect::route('proveedores.index')
+            // Session manda un mensaje de exito.
+            Session::flash('message-fallo', 'No se logro registrar el proveedor');
+            if(Auth::user()->idRole == 2){
+                return Redirect::route('proveedores.index')
                 ->withErrors($respuesta["validador"])
                 ->withInput();
+            }
+            else{
+                return Redirect::route('inicioRegistro')
+                ->withErrors($respuesta["validador"])
+                ->withInput();
+            }
         }
     }
 

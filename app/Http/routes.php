@@ -66,6 +66,103 @@ Route::group(['middleware' => 'web'], function () {
 		'uses' => 'HomeController@panelUsuario', 
 	]);
 
+	Route::group(['prefix' => '/panelUsuario/empleado',
+		'middleware' => ['auth', 'roles'],
+		// Roles a permitir
+		'roles' => ['Empleado']], function () {
+			Route::get('/registroCrias', [
+				'as' => 'inicioRegistro',
+				'uses' => 'RegistrosController@inicioRegistro', 
+			]);
+
+			Route::post('/registroCrias', [
+				'as' => 'registro.store',
+				'uses' => 'RegistrosController@store', 
+			]);
+
+			Route::post('/finalizarRegistro/{id}', [
+				'as' => 'registro.finalizar',
+				'uses' => 'RegistrosController@finalizarRegistro', 
+			]);
+
+			Route::resource('proveedores', 'ProveedoresController', [
+				'only' => ['store'],
+				'names' => ['store' => 'proveedores.store2',]
+			]);
+
+			Route::resource('crias', 'CriasController', [
+				'only' => ['index', 'store', 'update', 'destroy'],
+				'names' => [
+					'index' => 'crias.index',
+					'store' => 'crias.store',
+					'update' => 'crias.update',
+					'destroy' => 'crias.destroy',]
+			]);
+
+			Route::get('/asignacionSensores', [
+				'as' => 'indiceCriasGrasa2',
+				'uses' => 'CriasController@indiceCriasGrasa2', 
+			]);
+
+			Route::post('/asignacionSensores/{id}', [
+				'as' => 'asignacionSensor',
+				'uses' => 'CriasController@asignarSensor', 
+			]);
+
+			Route::get('/registroSensores', [
+				'as' => 'indiceCriasSensores',
+				'uses' => 'CriasController@indiceCriasSensores', 
+			]);
+
+			Route::post('/registroSensores/{id}', [
+				'as' => 'signosVitales.store',
+				'uses' => 'SignosVitalesController@store', 
+			]);
+
+			Route::resource('sensores', 'SensoresController', [
+				'only' => ['index', 'store', 'update', 'destroy'],
+				'names' => [
+					'index' => 'sensores.index',
+					'store' => 'sensores.store',
+					'update' => 'sensores.update',
+					'destroy' => 'sensores.destroy',]
+			]);
+	});
+
+	Route::group(['prefix' => '/panelUsuario/veterinaria',
+		'middleware' => ['auth', 'roles'],
+		// Roles a permitir
+		'roles' => ['Departamento de veterinaria']], function () {
+
+			Route::resource('dietas', 'DietasController', [
+				'only' => ['index', 'store', 'update', 'destroy'],
+				'names' => [
+					'index' => 'dietas.index',
+					'store' => 'dietas.store',
+					'update' => 'dietas.update',
+					'destroy' => 'dietas.destroy',]
+			]);
+
+			Route::resource('tratamientos', 'TratamientosController', [
+				'only' => ['index', 'store', 'update', 'destroy'],
+				'names' => [
+					'index' => 'tratamientos.index',
+					'store' => 'tratamientos.store',
+					'update' => 'tratamientos.update',
+					'destroy' => 'tratamientos.destroy',]
+			]);
+
+			Route::get('/procesoCriaEnferma', [
+				'as' => 'indiceCriasEnfermas',
+				'uses' => 'CriasController@indiceCriasEnfermas', 
+			]);
+
+			Route::post('/procesoCriaEnferma/{id}', [
+				'as' => 'procesarCuarentena',
+				'uses' => 'CriasController@procesarCuarentena', 
+			]);
+	});
+
 	Route::group(['prefix' => '/panelUsuario/admin',
 		'middleware' => ['auth', 'roles'],
 		// Roles a permitir
@@ -98,19 +195,4 @@ Route::group(['middleware' => 'web'], function () {
 					'destroy' => 'proveedores.destroy',]
 			]);
 	});
-
-	Route::group(['prefix' => '/panelUsuario/veterinaria',
-		'middleware' => ['auth', 'roles'],
-		// Roles a permitir
-		'roles' => ['Departamento de veterinaria']], function () {
-
-	});
-
-	Route::group(['prefix' => '/panelUsuario/empleado',
-		'middleware' => ['auth', 'roles'],
-		// Roles a permitir
-		'roles' => ['Empleado']], function () {
-
-	});
-
 });

@@ -13,6 +13,14 @@ use App\Http\Requests;
 
 class UsuariosController extends Controller
 {
+
+    protected $usuario;
+
+    public function __construct(Usuario $usuario)
+    {
+        $this->usuario = $usuario;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +43,7 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
-        $respuesta = Usuario::insertar($request);
+        $respuesta = $usuario->insertar($request);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha registrado exitosamente el usuario');
@@ -57,7 +65,7 @@ class UsuariosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $respuesta = Usuario::actualizar($request, $id);
+        $respuesta = $this->usuario->actualizar($request, $id);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha modificado exitosamente el usuario');

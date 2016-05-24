@@ -53,8 +53,6 @@ class CorralesTableSeeder extends Seeder
             'largo'			=> 70,
             'capacidad'		=> 600,
             'tipoCorral'	=> 1
-        ]);
-
-        
+        ]);        
     }
 }

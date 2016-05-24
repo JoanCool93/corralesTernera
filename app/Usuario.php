@@ -112,7 +112,7 @@ class Usuario extends Authenticatable
         );
     }
 
-    public static function actualizar(Request $r, $id)
+    public function actualizar(Request $r, $id)
     {   
         //Se crea un arreglo contra el cual se cotejaran los datos que se reciban.
         $reglas = array(
@@ -141,9 +141,9 @@ class Usuario extends Authenticatable
             DB::beginTransaction();
             DB::table('usuarios')->where('idUsuario', $id)->lockForUpdate()->get();
             try {
-                $plaza = Usuario::find($id);
-                $plaza->fill($r->all());
-                $plaza->save();
+                $usuario = Usuario::find($id);
+                $usuario->fill($r->all());
+                $usuario->save();
                 DB::commit();
             }catch(\Exception $e)
             {

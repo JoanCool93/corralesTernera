@@ -80,10 +80,10 @@
             2 => 'Administrador',
             3 => 'Departamento de veterinaria',
             4 => 'Empleado'],2 , ['class'=> 'form-control', 'value'=>'{{ old("idRole") }}']) !!}
-            @if ($errors->has('idRole'))
-            <span class="help-block">
-                <strong>{{ $errors->first('idRole') }}</strong>
-            </span>
-            @endif
-        </div>
+        @if ($errors->has('idRole'))
+        <span class="help-block">
+            <strong>{{ $errors->first('idRole') }}</strong>
+        </span>
+        @endif
     </div>
+</div>

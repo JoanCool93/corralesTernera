@@ -34,6 +34,7 @@
                 </div>
             </div>
             <div class="col-lg-2"  align="center">
+                {!! Form::open(['route' => 'proveedores.store', 'method' => 'POST', 'class' => 'form']) !!}
                 @include('panelUsuario.adminPagina.proveedores.forms.modalAgregarProveedor')
             </div>
         </div>

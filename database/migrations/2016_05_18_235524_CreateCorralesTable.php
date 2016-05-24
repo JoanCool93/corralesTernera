@@ -18,6 +18,7 @@ class CreateCorralesTable extends Migration
             $table->integer('ancho');
             $table->integer('largo');
             $table->integer('capacidad');
+            $table->integer('capacidadUsada');
             $table->integer('tipoCorral');
             $table->timestamps();
         });

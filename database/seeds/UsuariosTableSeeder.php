@@ -48,5 +48,15 @@ class UsuariosTableSeeder extends Seeder
             'password'	=> bcrypt('alquimista'),
             'idRole'            => 4
         ]);
+
+        Usuario::create([
+            'idUsuario' => 4,
+            'nombre'    => 'Manuel Alejandro',
+            'apellidoPaterno'    => 'German',
+            'apellidoMaterno'    => 'Gutierrez',
+            'email'     => 'manuelg@hotmail.com',
+            'password'  => bcrypt('patronus35'),
+            'idRole'            => 2
+        ]);
     }
 }

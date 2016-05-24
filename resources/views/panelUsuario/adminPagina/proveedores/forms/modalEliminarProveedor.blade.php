@@ -27,7 +27,8 @@
                                 </tr>
                                 <tr>
                                     <th class="col-lg-2">RFC:</th>
-                                    <th class="col-lg-4">{{$proveedor->rfc}}</thproveedor                                </tr>
+                                    <th class="col-lg-4">{{$proveedor->rfc}}</th>
+                                </tr>
                                 <tr>
                                     <th class="col-lg-2">Descripción:</th>
                                     <th class="col-lg-4">{{$proveedor->descripcion}}</th>
