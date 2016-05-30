@@ -4,12 +4,21 @@ namespace App;
 
 use DB;
 use App\Sensor;
+use App\Corral;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 
 class Cria extends Model
 {
+    protected $corral;
+    protected $sensor;
+
+    public function __construct(Corral $corral, Sensor $sensor)
+    {
+        $this->corral = $corral;
+        $this->sensor = $sensor;
+    }
     /**
      * The table associated with the model.
      *
@@ -31,7 +40,7 @@ class Cria extends Model
      * @var array
      */
     protected $fillable = [
-        'idCria', 'idRegistro', 'peso', 'altura', 'edad', 'colorPelaje', 'raza', 'colorMusculo', 'clasificacion', 'estado', 'idDieta', 'idTratamiento', 'idSensor',
+        'idCria', 'idRegistro', 'peso', 'altura', 'edad', 'colorPelaje', 'raza', 'colorMusculo', 'clasificacion', 'estado', 'idDieta', 'idTratamiento', 'idSensor', 'idCorral'
     ];
 
     /**
@@ -48,7 +57,7 @@ class Cria extends Model
         //Si alguno de los valores requeridos para clasificar la cria no ha sido
         //asignado entonces no se clasifica
         if (isset($this->attributes['peso']) && isset($this->attributes['altura']) && isset($this->attributes['edad'])) {
-            $this->attributes['clasificacion'] = Cria::clasificar($this->attributes['peso'],$this->attributes['altura'],$this->attributes['edad']);
+            $this->attributes['clasificacion'] = $this->corral->clasificar($this->attributes['peso'],$this->attributes['altura'],$this->attributes['edad']);
         }
         
     }
@@ -59,7 +68,7 @@ class Cria extends Model
         //Si alguno de los valores requeridos para clasificar la cria no ha sido
         //asignado entonces no se clasifica
         if (isset($this->attributes['peso']) && isset($this->attributes['altura']) && isset($this->attributes['edad'])) {
-            $this->attributes['clasificacion'] = Cria::clasificar($this->attributes['peso'],$this->attributes['altura'],$this->attributes['edad']);
+            $this->attributes['clasificacion'] = $this->corral->clasificar($this->attributes['peso'],$this->attributes['altura'],$this->attributes['edad']);
         }
     }
 
@@ -69,12 +78,12 @@ class Cria extends Model
         //Si alguno de los valores requeridos para clasificar la cria no ha sido
         //asignado entonces no se clasifica
         if (isset($this->attributes['peso']) && isset($this->attributes['altura']) && isset($this->attributes['edad'])) {
-            $this->attributes['clasificacion'] = Cria::clasificar($this->attributes['peso'],$this->attributes['altura'],$this->attributes['edad']);
+            $this->attributes['clasificacion'] = $this->corral->clasificar($this->attributes['peso'],$this->attributes['altura'],$this->attributes['edad']);
         }
         
     }
 
-    public static function insertar(Request $datos)
+    public function crearCria(Request $datos)
     {
         //Se crea un arreglo contra el cual se cotejaran los datos que se reciban.
         $reglas = array(
@@ -103,10 +112,11 @@ class Cria extends Model
                 "bandera" => false,
                 "validador" => $validador,
             );
-        } else { 
+        } else {
+            $corralCria = $this->corral->obtenerCorral();
             // Crea una instancia de Cria y se modifican sus atributos con los 
             //datos que se obtuvieron del formulario y se almacena en disco.
-            Cria::create([
+            $this->corral->create([
                 'idCria'        => $datos['idCria'],
                 'idRegistro'    => $datos['idRegistro'],
                 'peso'          => $datos['peso'],
@@ -115,12 +125,16 @@ class Cria extends Model
                 'colorPelaje'   => $datos['colorPelaje'],
                 'raza'          => $datos['raza'],
                 'colorMusculo'  => $datos['colorMusculo'],
-                'clasificacion' => Cria::clasificar($datos['peso'],$datos['altura'],$datos['edad']),
+                'clasificacion' => $this->corral->clasificar($datos['peso'],$datos['altura'],$datos['edad']),
                 'estado'        => $datos['estado'],
                 'idDieta'       => $datos['idDieta'],
                 'idTratamiento' => $datos['idTratamiento'],
-                'idSensor'      => 0,
+                'idSensor'      => 1,
+                'idCorral'      => $corralCria->idCorral,
             ]);
+
+            $corralCria->capacidadUsada += 1;
+            $corralCria->save();
         }
         return array(
                 "bandera" => true,
@@ -129,7 +143,7 @@ class Cria extends Model
     }
 
     //Método para la clasificación de la cria
-    private static function clasificar($peso, $altura, $edad){
+    private function clasificar($peso, $altura, $edad){
         if ($peso < 100 && $altura < 0.80 && $edad < 3) {
             return  1;
         } elseif ($peso < 300 && $altura < 1.20 && $edad < 8) {
@@ -141,7 +155,7 @@ class Cria extends Model
         }
     }
 
-    public static function actualizar(Request $r, $id)
+    public function actualizar(Request $r, $id)
     {   
         //Se crea un arreglo contra el cual se cotejaran los datos que se reciban.
         $reglas = array(
@@ -176,7 +190,7 @@ class Cria extends Model
             DB::beginTransaction();
             DB::table('crias')->where('idCria', $id)->lockForUpdate()->get();
             try {
-                $cria = Cria::find($id);
+                $cria = $this->corral->find($id);
                 $cria->fill($r->all());
                 $cria->save();
                 DB::commit();
@@ -192,19 +206,19 @@ class Cria extends Model
             );
     }
 
-    public static function asignarSensor(Request $request, $id){
+    public function asignarSensor(Request $request, $id){
         // Crea una instancia de Usuario y se modifican sus atributos con los 
         //datos que se obtuvieron del formulario y se almacena en disco.
         DB::beginTransaction();
         DB::table('crias')->where('idCria', $id)->lockForUpdate()->get();
         DB::table('sensores')->where('idSensor', $request->idSensor)->lockForUpdate()->get();
         try {
-            $cria = Cria::find($id);
+            $cria = $this->corral->find($id);
 
             //Bloquea la tupla del sensor actual para modificar su estado
             // a 1 (disponible).
             DB::table('sensores')->where('idSensor', $cria->idSensor)->lockForUpdate()->get();
-            $sensorActual = Sensor::find($cria->idSensor);
+            $sensorActual = $this->sensor->find($cria->idSensor);
             $sensorActual->estado = 1;
             $sensorActual->save();
 
@@ -214,7 +228,7 @@ class Cria extends Model
 
             //Si el sensor es distinto del sensor default (Ninguno) se actualiza el estado.
             if ($request->idSensor > 1) {
-                $sensorNuevo = Sensor::find($request->idSensor);
+                $sensorNuevo = $this->sensor->find($request->idSensor);
                 $sensorNuevo->estado = 2;
                 $sensorNuevo->save();
             }
@@ -230,25 +244,29 @@ class Cria extends Model
         }
     }
 
-    public static function evaluarCria($presionSanguinea, $frecuenciaCardiaca, $frecuenciaRespiratoria, $temperatura){
+    public function evaluarCria($presionSanguinea, $frecuenciaCardiaca, $frecuenciaRespiratoria, $temperatura){
         if ($frecuenciaCardiaca < 60 || $frecuenciaRespiratoria < 12 || $temperatura < 35 || $frecuenciaCardiaca > 100 || $frecuenciaRespiratoria > 20 || $temperatura > 38 || $presionSanguinea > 140) {
             return 3;
         }
         return 1;
     }
 
-    public static function procesarCuarentena(Request $request, $id){
+    public function procesarCuarentena(Request $request, $idCria){
         // Crea una instancia de Usuario y se modifican sus atributos con los 
         //datos que se obtuvieron del formulario y se almacena en disco.
         DB::beginTransaction();
-        DB::table('crias')->where('idCria', $id)->lockForUpdate()->get();
+        DB::table('crias')->where('idCria', $idCria)->lockForUpdate()->get();
         try {
-            $cria = Cria::find($id);
-
             //Se asigna dieta y tratamiento a la cria y el estado pasa a 4 (Cuarentena).
+            $cria = $this->corral->find($idCria);
             $cria->idDieta = $request->idDieta;
             $cria->idTratamiento = $request->idTratamiento;
             $cria->estado = 4;
+
+            //Se cambia de corral a la cria.
+            $cria->idCorral = $this->cambiarCorral($cria->idCorral);
+
+            //Se guardan los cambios.
             $cria->save();            
             DB::commit();
             return true;
@@ -260,7 +278,33 @@ class Cria extends Model
         }
     }
 
-    public static function eliminar($id){
-        Cria::destroy($id);
+    public function cambiarCorral($idCorralActual){
+        //Se consigue el corral actual
+        $corralActual = Corral::find($idCorralActual);
+
+        //Se consigue el nuevo corral al cual se cambiara la cria.
+        $corralNuevo = $this->corral->obtenerCorralCuarentena();
+
+        //Se comprueva que no sean el mismo corral.
+        if ($corralNuevo->idCorral != $corralActual->idCorral) {
+            //Bloquea la tupla del corral actual
+            DB::table('corrales')->where('idCorral', $corralActual->idCorral)->lockForUpdate()->get();
+            //Se disminuye la capacidad usada del corral actual.
+            $corralActual->capacidadUsada -= 1;
+            $corralActual->save();
+
+            //Bloquea la tupla del corral nuevo
+            DB::table('corrales')->where('idCorral', $corralNuevo->idCorral)->lockForUpdate()->get();
+            //Se aumenta la capacidad usada del corral nuevo.
+            $corralNuevo->capacidadUsada += 1;
+            $corralNuevo->save(); 
+
+            return $corralNuevo->idCorral;
+        }
+        return  $corralActual->idCorral;
+    }
+
+    public function eliminar($id){
+        $this->corral->destroy($id);
     }
 }

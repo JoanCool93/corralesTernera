@@ -13,6 +13,13 @@ use App\Http\Requests;
 
 class TratamientosController extends Controller
 {
+
+    protected $tratamiento;
+
+    public function __construct(Tratamiento $tratamiento)
+    {
+        $this->tratamiento = $tratamiento;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +28,7 @@ class TratamientosController extends Controller
     public function index()
     {
         // Obtener todos los usuarios
-        $tratamientos = Tratamiento::paginate(5);
+        $tratamientos = $this->tratamiento->paginate(5);
 
         // Carga la vista a la cual le pasa todos los usuarios.
         return \View::make('panelUsuario.dptoVeterinaria.tratamientos.indiceTratamientos', compact('tratamientos'));
@@ -35,7 +42,7 @@ class TratamientosController extends Controller
      */
     public function store(Request $request)
     {
-        $respuesta = Tratamiento::insertar($request);
+        $respuesta = $this->tratamiento->insertar($request);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha registrado exitosamente el tratamiento');
@@ -57,7 +64,7 @@ class TratamientosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $respuesta = Tratamiento::actualizar($request, $id);
+        $respuesta = $this->tratamiento->actualizar($request, $id);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha modificado exitosamente el tratamiento');
@@ -78,7 +85,7 @@ class TratamientosController extends Controller
      */
     public function destroy($id)
     {
-        Tratamiento::eliminar($id);
+        $this->tratamiento->eliminar($id);
         // Session manda un mensaje de exito.
         Session::flash('message', 'Se ha eliminado exitosamente el tratamiento');
         // Redireccionmiento.

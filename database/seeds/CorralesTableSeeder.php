@@ -17,7 +17,7 @@ class CorralesTableSeeder extends Seeder
             exit('I just stopped you getting fired. Love, Amo.');
         }
 
-        DB::table('corrales')->truncate();
+        //DB::table('corrales')->truncate();
 
         Corral::create([
             'idCorral'		=> 1,
@@ -25,6 +25,7 @@ class CorralesTableSeeder extends Seeder
             'ancho'			=> 25,
             'largo'			=> 55,
             'capacidad'		=> 450,
+            'capacidadUsada'=> 1,
             'tipoCorral'	=> 1
         ]);
 
@@ -34,6 +35,7 @@ class CorralesTableSeeder extends Seeder
             'ancho'			=> 20,
             'largo'			=> 60,
             'capacidad'		=> 500,
+            'capacidadUsada'=> 0,
             'tipoCorral'	=> 2
         ]);
 
@@ -43,6 +45,7 @@ class CorralesTableSeeder extends Seeder
             'ancho'			=> 35,
             'largo'			=> 65,
             'capacidad'		=> 650,
+            'capacidadUsada'=> 0,
             'tipoCorral'	=> 3
         ]);
 
@@ -52,6 +55,7 @@ class CorralesTableSeeder extends Seeder
             'ancho'			=> 30,
             'largo'			=> 70,
             'capacidad'		=> 600,
+            'capacidadUsada'=> 0,
             'tipoCorral'	=> 1
         ]);        
     }

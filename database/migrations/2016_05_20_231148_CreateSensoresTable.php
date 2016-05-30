@@ -13,7 +13,7 @@ class CreateSensoresTable extends Migration
     public function up()
     {
         Schema::create('sensores', function(Blueprint $table) {
-            $table->increments('idSensor');
+            $table->increments('idSensor')->unsigned();
             $table->string('descripcion', 255);
             $table->integer('estado');
             $table->timestamps();

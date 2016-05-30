@@ -17,7 +17,7 @@ class ProveedoresTableSeeder extends Seeder
             exit('I just stopped you getting fired. Love, Amo.');
         }
 
-        DB::table('proveedores')->truncate();
+        //DB::table('proveedores')->truncate();
 
         Proveedor::create([
             'idProveedor'	=> 1,

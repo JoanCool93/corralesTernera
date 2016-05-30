@@ -17,7 +17,7 @@ class RegistrosTableSeeder extends Seeder
             exit('I just stopped you getting fired. Love, Amo.');
         }
 
-        DB::table('registros')->truncate();
+        //DB::table('registros')->truncate();
 
         Registro::create([
             'idRegistro'	=> 1,

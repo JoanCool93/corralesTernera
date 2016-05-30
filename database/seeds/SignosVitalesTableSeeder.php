@@ -17,7 +17,7 @@ class SignosVitalesTableSeeder extends Seeder
             exit('I just stopped you getting fired. Love, Amo.');
         }
 
-        DB::table('signosVitales')->truncate();
+        //DB::table('signosVitales')->truncate();
 
         SignoVital::create([
             'idSignos'					=> 1,

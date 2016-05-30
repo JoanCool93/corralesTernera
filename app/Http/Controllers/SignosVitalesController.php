@@ -11,6 +11,13 @@ use App\Http\Requests;
 
 class SignosVitalesController extends Controller
 {
+
+    protected $signoVital;
+
+    public function __construct(SignoVital $signoVital)
+    {
+        $this->signoVital = $signoVital;
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -19,7 +26,7 @@ class SignosVitalesController extends Controller
      */
     public function store(Request $request, $id)
     {
-        $respuesta = SignoVital::insertar($request, $id);
+        $respuesta = $this->signoVital->crearRegitroSignos($request, $id);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha realizado exitosamente el registro de signos vitales');

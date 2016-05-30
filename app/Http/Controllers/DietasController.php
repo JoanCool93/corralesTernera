@@ -13,6 +13,13 @@ use App\Http\Requests;
 
 class DietasController extends Controller
 {
+
+    protected $dieta;
+
+    public function __construct(Dieta $dieta)
+    {
+        $this->dieta = $dieta;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +28,7 @@ class DietasController extends Controller
     public function index()
     {
         // Obtener todos los usuarios
-        $dietas = Dieta::paginate(5);
+        $dietas = $this->dieta->paginate(5);
 
         // Carga la vista a la cual le pasa todos los dietass.
         return \View::make('panelUsuario.dptoVeterinaria.dietas.indiceDietas', compact('dietas'));
@@ -35,7 +42,7 @@ class DietasController extends Controller
      */
     public function store(Request $request)
     {
-        $respuesta = Dieta::insertar($request);
+        $respuesta = $this->dieta->insertar($request);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha registrado exitosamente el dieta');
@@ -57,7 +64,7 @@ class DietasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $respuesta = Dieta::actualizar($request, $id);
+        $respuesta = $this->dieta->actualizar($request, $id);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha modificado exitosamente el dieta');
@@ -78,7 +85,7 @@ class DietasController extends Controller
      */
     public function destroy($id)
     {
-        Dieta::eliminar($id);
+        $this->dieta->eliminar($id);
         // Session manda un mensaje de exito.
         Session::flash('message', 'Se ha eliminado exitosamente el dieta');
         // Redireccionmiento.

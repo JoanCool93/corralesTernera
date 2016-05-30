@@ -13,7 +13,7 @@ class CreateCorralesTable extends Migration
     public function up()
     {
         Schema::create('corrales', function(Blueprint $table) {
-            $table->increments('idCorral');
+            $table->increments('idCorral')->unsigned();
             $table->string('descripcion', 255);
             $table->integer('ancho');
             $table->integer('largo');

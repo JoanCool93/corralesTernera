@@ -13,7 +13,7 @@ class CreateDietasTable extends Migration
     public function up()
     {
         Schema::create('dietas', function(Blueprint $table) {
-            $table->increments('idDieta');
+            $table->increments('idDieta')->unsigned();
             $table->string('nombre', 50);
             $table->string('descripcion', 255);
             $table->timestamps();

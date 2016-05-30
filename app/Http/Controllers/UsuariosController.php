@@ -29,7 +29,7 @@ class UsuariosController extends Controller
     public function index()
     {
         // Obtener todos los usuarios
-        $usuarios = Usuario::paginate(5);
+        $usuarios = $this->usuario->paginate(5);
 
         // Carga la vista a la cual le pasa todos los usuarios.
         return \View::make('panelUsuario.adminPagina.usuarios.indiceUsuarios', compact('usuarios'));
@@ -43,7 +43,7 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
-        $respuesta = $usuario->insertar($request);
+        $respuesta = $this->usuario->insertar($request);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha registrado exitosamente el usuario');
@@ -86,22 +86,10 @@ class UsuariosController extends Controller
      */
     public function destroy($id)
     {
-        Usuario::eliminar($id);
+        $this->usuario->eliminar($id);
         // Session manda un mensaje de exito.
         Session::flash('message', 'Se ha eliminado exitosamente el usuario');
         // Redireccionmiento.
         return Redirect::route('usuarios.index');
     }
-
-/*    public function register(Request $request)
-    {
-        $validator = $this->validator($request->all());
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
-        $this->create($request->all());
-        return redirect($this->redirectPath());
-    }*/
 }

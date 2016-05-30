@@ -15,10 +15,10 @@ class DatabaseSeeder extends Seeder
         $this->call(UsuariosTableSeeder::class);
         $this->call(CorralesTableSeeder::class);
         $this->call(ProveedoresTableSeeder::class);
+        $this->call(RegistrosTableSeeder::class);
         $this->call(DietasTableSeeder::class);
         $this->call(TratamientosTableSeeder::class);
         $this->call(SensoresTableSeeder::class);
-        $this->call(RegistrosTableSeeder::class);
         $this->call(CriasTableSeeder::class);
         $this->call(SignosVitalesTableSeeder::class);
     }

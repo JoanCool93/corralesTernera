@@ -17,7 +17,7 @@ class SensoresTableSeeder extends Seeder
             exit('I just stopped you getting fired. Love, Amo.');
         }
 
-        DB::table('sensores')->truncate();
+        //DB::table('sensores')->truncate();
 
         Sensor::create([
             'idSensor'      => 1,

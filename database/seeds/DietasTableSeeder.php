@@ -17,7 +17,7 @@ class DietasTableSeeder extends Seeder
             exit('I just stopped you getting fired. Love, Amo.');
         }
 
-        DB::table('dietas')->truncate();
+        //DB::table('dietas')->truncate();
 
         Dieta::create([
             'idDieta'       => 1,

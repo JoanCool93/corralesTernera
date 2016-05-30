@@ -41,7 +41,7 @@ class Sensor extends Model
     protected $hidden = [
     ];
 
-    public static function insertar(Request $datos)
+    public function insertar(Request $datos)
     {
         //Se crea un arreglo contra el cual se cotejaran los datos que se reciban.
         $reglas = array(
@@ -73,7 +73,7 @@ class Sensor extends Model
         );
     }
 
-    public static function actualizar(Request $r, $id)
+    public function actualizar(Request $r, $id)
     {   
         //Se crea un arreglo contra el cual se cotejaran los datos que se reciban.
         $reglas = array(
@@ -114,7 +114,7 @@ class Sensor extends Model
             );
     }
 
-    public static function eliminar($id){
+    public function eliminar($id){
         Sensor::destroy($id);
     }
 }

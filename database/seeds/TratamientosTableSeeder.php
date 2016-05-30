@@ -17,7 +17,7 @@ class TratamientosTableSeeder extends Seeder
             exit('I just stopped you getting fired. Love, Amo.');
         }
 
-        DB::table('tratamientos')->truncate();
+        //DB::table('tratamientos')->truncate();
 
         Tratamiento::create([
             'idTratamiento'		=> 1,

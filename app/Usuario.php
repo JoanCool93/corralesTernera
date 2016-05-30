@@ -71,7 +71,7 @@ class Usuario extends Authenticatable
         return (strtolower($need_role)==strtolower($this->have_role->nombre)) ? true : false;
     }
 
-    public static function insertar(Request $datos)
+    public function insertar(Request $datos)
     {
         //Se crea un arreglo contra el cual se cotejaran los datos que se reciban.
         $reglas = array(
@@ -157,7 +157,7 @@ class Usuario extends Authenticatable
             );
     }
 
-    public static function eliminar($id){
+    public function eliminar($id){
         Usuario::destroy($id);
     }
 }

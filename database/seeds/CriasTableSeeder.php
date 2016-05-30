@@ -17,7 +17,7 @@ class CriasTableSeeder extends Seeder
             exit('I just stopped you getting fired. Love, Amo.');
         }
 
-        DB::table('crias')->truncate();
+        //DB::table('crias')->truncate();
 
         Cria::create([
             'idCria'		=> 1,
@@ -33,6 +33,7 @@ class CriasTableSeeder extends Seeder
             'idDieta'		=> 1,
             'idTratamiento'	=> 1,
             'idSensor'		=> 1,
+            'idCorral'      => 1
         ]);
     }
 }

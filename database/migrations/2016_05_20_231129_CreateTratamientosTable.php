@@ -13,7 +13,7 @@ class CreateTratamientosTable extends Migration
     public function up()
     {
         Schema::create('tratamientos', function(Blueprint $table) {
-            $table->increments('idTratamiento');
+            $table->increments('idTratamiento')->unsigned();
             $table->string('nombre', 50);
             $table->string('descripcion', 255);
             $table->timestamps();

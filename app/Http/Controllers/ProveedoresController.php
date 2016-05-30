@@ -13,6 +13,12 @@ use App\Http\Requests;
 
 class ProveedoresController extends Controller
 {
+    protected $proveedor;
+
+    public function __construct(Proveedor $proveedor)
+    {
+        $this->proveedor = $proveedor;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +27,7 @@ class ProveedoresController extends Controller
     public function index()
     {
         // Obtener todos los usuarios
-        $proveedores = Proveedor::paginate(5);
+        $proveedores = $this->proveedor->paginate(5);
 
         // Carga la vista a la cual le pasa todos los usuarios.
         return \View::make('panelUsuario.adminPagina.proveedores.indiceProveedores', compact('proveedores'));
@@ -35,7 +41,7 @@ class ProveedoresController extends Controller
      */
     public function store(Request $request)
     {
-        $respuesta = Proveedor::insertar($request);
+        $respuesta = $this->proveedor->insertar($request);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha registrado exitosamente el proveedor');
@@ -71,7 +77,7 @@ class ProveedoresController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $respuesta = Proveedor::actualizar($request, $id);
+        $respuesta = $this->proveedor->actualizar($request, $id);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha modificado exitosamente el proveedor');
@@ -92,7 +98,7 @@ class ProveedoresController extends Controller
      */
     public function destroy($id)
     {
-        Proveedor::eliminar($id);
+        $this->proveedor->eliminar($id);
         // Session manda un mensaje de exito.
         Session::flash('message', 'Se ha eliminado exitosamente el proveedor');
         // Redireccionmiento.

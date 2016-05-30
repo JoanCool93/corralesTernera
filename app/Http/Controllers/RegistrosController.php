@@ -16,6 +16,19 @@ use App\Http\Requests;
 
 class RegistrosController extends Controller
 {
+
+    protected $registro;
+    protected $dieta;
+    protected $tratamiento;
+    protected $proveedor;
+
+    public function __construct(Registro $registro, Dieta $dieta, Tratamiento $tratamiento, Proveedor $proveedor)
+    {
+        $this->registro = $registro;
+        $this->dieta = $dieta;
+        $this->tratamiento = $tratamiento;
+        $this->proveedor = $proveedor;
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -24,18 +37,18 @@ class RegistrosController extends Controller
      */
     public function inicioRegistro()
     {
-        $resultado = Registro::comprobarRegistro();
+        $resultado = $this->registro->comprobarRegistro();
         if ($resultado["bandera"]) {
             $usuario = $resultado["usuario"];
             $proveedor = $resultado["proveedor"];
             $crias = $resultado["crias"];
             $registro = $resultado["registro"];
-            $dietas = Dieta::lists('nombre', 'idDieta');
-            $tratamientos = Tratamiento::lists('nombre', 'idTratamiento');
+            $dietas = $this->dieta->lists('nombre', 'idDieta');
+            $tratamientos = $this->tratamiento->lists('nombre', 'idTratamiento');
             // Carga la vista a la cual le pasa todos los usuarios.
             return \View::make('panelUsuario.empleado.registroCrias', compact('registro', 'usuario', 'proveedor', 'crias', 'dietas', 'tratamientos'));
         } else {
-            $proveedores = Proveedor::lists('nombre', 'idProveedor');
+            $proveedores = $this->proveedor->lists('nombre', 'idProveedor');
             // Carga la vista a la cual le pasa todos los usuarios.
             return \View::make('panelUsuario.empleado.registroCriasNuevo', compact('proveedores'));
         }
@@ -49,7 +62,7 @@ class RegistrosController extends Controller
      */
     public function store(Request $request)
     {
-        Registro::insertar($request);
+        $this->registro->crearRegistro($request);
         // Redireccionmiento.
         return Redirect::route('inicioRegistro');
     }
@@ -60,9 +73,9 @@ class RegistrosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function finalizarRegistro($id)
+    public function finalizarRegistro($idRegistro)
     {
-        Registro::finalizar($id);
+        $this->registro->finalizar($idRegistro);
         // Redireccionmiento.
         return Redirect::route('panelUsuario');
     }

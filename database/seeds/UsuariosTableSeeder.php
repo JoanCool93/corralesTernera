@@ -17,7 +17,7 @@ class UsuariosTableSeeder extends Seeder
             exit('I just stopped you getting fired. Love, Amo.');
         }
 
-        DB::table('usuarios')->truncate();
+        //DB::table('usuarios')->truncate();
 
         Usuario::create([
             'idUsuario'	=> 1,

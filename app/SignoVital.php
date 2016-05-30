@@ -10,6 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class SignoVital extends Model
 {
+    protected $cria;
+
+    public function __construct(Cria $cria)
+    {
+        $this->cria = $cria;
+    }
     /**
      * The table associated with the model.
      *
@@ -42,7 +48,7 @@ class SignoVital extends Model
     protected $hidden = [
     ];
 
-    public static function insertar(Request $datos, $id)
+    public function crearRegistroSignos(Request $datos, $idCria)
     {
         //Se crea un arreglo contra el cual se cotejaran los datos que se reciban.
         $reglas = array(
@@ -76,13 +82,23 @@ class SignoVital extends Model
                 'temperatura'				=> $datos['temperatura'],
             ]);
 
-            // Crea una instancia de Cria y se modifican sus atributos con los 
-            //datos que se obtuvieron del formulario y se almacena en disco.
+            $this->analizarSignos($idCria, $datos['presionSanguinea'], $datos['frecuenciaCardiaca'], $datos['frecuenciaRespiratoria'], $datos['temperatura']);
+        }
+        return array(
+                "bandera" => true,
+                "validador" => $validador,
+        );
+    }
+
+    private function analizarSignos($idCria, $presionSanguinea, $frecuenciaCardiaca, $frecuenciaRespiratoria, $temperatura)
+    {
+            // Crea una instancia de Cria y se modifican su estado de acuerdo a lo
+            //que arroje el métod evaluarCria de la clase Cria.
             DB::beginTransaction();
-            DB::table('crias')->where('idCria', $id)->lockForUpdate()->get();
+            DB::table('crias')->where('idCria', $idCria)->lockForUpdate()->get();
             try {
-                $cria = Cria::find($id);
-                $cria->estado = Cria::evaluarCria($datos['presionSanguinea'], $datos['frecuenciaCardiaca'], $datos['frecuenciaRespiratoria'], $datos['temperatura']);
+                $cria = $this->cria->find($idCria);
+                $cria->estado = $this->cria->evaluarCria($presionSanguinea, $frecuenciaCardiaca, $frecuenciaRespiratoria, $temperatura);
                 $cria->save();
                 DB::commit();
             }catch(\Exception $e)
@@ -90,11 +106,5 @@ class SignoVital extends Model
                 DB::rollback();
                 throw $e;
             }
-
-        }
-        return array(
-                "bandera" => true,
-                "validador" => $validador,
-        );
     }
 }

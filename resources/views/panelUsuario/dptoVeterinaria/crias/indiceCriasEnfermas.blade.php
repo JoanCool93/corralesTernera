@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Panel de usuario
-                <small>Departamento Veterianria</small>
+                <small>Departamento de Veterinaria</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="{{ url('/') }}">Home</a></li>

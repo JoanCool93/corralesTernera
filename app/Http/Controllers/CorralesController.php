@@ -13,6 +13,13 @@ use App\Http\Requests;
 
 class CorralesController extends Controller
 {
+
+    protected $corral;
+
+    public function __construct(Corral $corral)
+    {
+        $this->corral = $corral;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +28,7 @@ class CorralesController extends Controller
     public function index()
     {
         // Obtener todos los usuarios
-        $corrales = Corral::paginate(5);
+        $corrales = $this->corral->paginate(5);
 
         // Carga la vista a la cual le pasa todos los usuarios.
         return \View::make('panelUsuario.adminPagina.corrales.indiceCorrales', compact('corrales'));
@@ -35,7 +42,7 @@ class CorralesController extends Controller
      */
     public function store(Request $request)
     {
-        $respuesta = Corral::insertar($request);
+        $respuesta = $this->corral->insertar($request);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha registrado exitosamente el corral');
@@ -57,7 +64,7 @@ class CorralesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $respuesta = Corral::actualizar($request, $id);
+        $respuesta = $this->corral->actualizar($request, $id);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha modificado exitosamente el corral');
@@ -78,7 +85,7 @@ class CorralesController extends Controller
      */
     public function destroy($id)
     {
-        Corral::eliminar($id);
+        $this->corral->eliminar($id);
         // Session manda un mensaje de exito.
         Session::flash('message', 'Se ha eliminado exitosamente el corral');
         // Redireccionmiento.

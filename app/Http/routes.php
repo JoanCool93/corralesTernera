@@ -80,7 +80,7 @@ Route::group(['middleware' => 'web'], function () {
 				'uses' => 'RegistrosController@store', 
 			]);
 
-			Route::post('/finalizarRegistro/{id}', [
+			Route::post('/finalizarRegistro/{idRegistro}', [
 				'as' => 'registro.finalizar',
 				'uses' => 'RegistrosController@finalizarRegistro', 
 			]);
@@ -157,7 +157,7 @@ Route::group(['middleware' => 'web'], function () {
 				'uses' => 'CriasController@indiceCriasEnfermas', 
 			]);
 
-			Route::post('/procesoCriaEnferma/{id}', [
+			Route::post('/procesoCriaEnferma/{idCria}', [
 				'as' => 'procesarCuarentena',
 				'uses' => 'CriasController@procesarCuarentena', 
 			]);

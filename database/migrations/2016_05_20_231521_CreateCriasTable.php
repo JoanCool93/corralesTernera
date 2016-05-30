@@ -15,7 +15,7 @@ class CreateCriasTable extends Migration
         Schema::create('crias', function(Blueprint $table) {
             $table->string('idCria');
             $table->primary('idCria');
-            $table->integer('idRegistro');
+            $table->integer('idRegistro')->unsigned();
             $table->decimal('peso', 5, 2);
             $table->decimal('altura', 3, 2);
             $table->integer('edad');
@@ -24,12 +24,25 @@ class CreateCriasTable extends Migration
             $table->string('colorMusculo', 50);
             $table->integer('clasificacion');
             $table->integer('estado');
-            $table->integer('idDieta');
-            $table->integer('idTratamiento');
-            $table->integer('idSensor');
-            $table->integer('idCorral');
+            $table->integer('idDieta')->unsigned();
+            $table->integer('idTratamiento')->unsigned();
+            $table->integer('idSensor')->unsigned();
+            $table->integer('idCorral')->unsigned();
             $table->timestamps();
         });
+
+       Schema::table('crias', function($table) {
+
+            $table->foreign('idRegistro')->references('idRegistro')->on('registros');
+
+            $table->foreign('idDieta')->references('idDieta')->on('dietas');
+
+            $table->foreign('idTratamiento')->references('idTratamiento')->on('tratamientos');
+
+            $table->foreign('idSensor')->references('idSensor')->on('sensores');
+
+            $table->foreign('idCorral')->references('idCorral')->on('corrales');
+       });
     }
 
     /**

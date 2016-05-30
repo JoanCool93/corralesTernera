@@ -41,7 +41,7 @@ class Corral extends Model
     protected $hidden = [
     ];
 
-    public static function insertar(Request $datos)
+    public function insertar(Request $datos)
     {
         //Se crea un arreglo contra el cual se cotejaran los datos que se reciban.
         $reglas = array(
@@ -81,7 +81,7 @@ class Corral extends Model
         );
     }
 
-    public static function actualizar(Request $r, $id)
+    public function actualizar(Request $r, $id)
     {   
         //Se crea un arreglo contra el cual se cotejaran los datos que se reciban.
         $reglas = array(
@@ -126,7 +126,15 @@ class Corral extends Model
             );
     }
 
-    public static function eliminar($id){
+    public function eliminar($id){
         Corral::destroy($id);
+    }
+
+    public function obtenerCorral(){
+        return Corral::where('tipoCorral', '<>', 3)->orWhere('capacidadUsada', '<', 'capacidad')->first();
+    }
+
+    public function obtenerCorralCuarentena(){
+        return Corral::where('tipoCorral', 3)->orWhere('capacidadUsada', '<', 'capacidad')->first();
     }
 }

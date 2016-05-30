@@ -13,6 +13,13 @@ use App\Http\Requests;
 
 class SensoresController extends Controller
 {
+
+    protected $sensor;
+
+    public function __construct(Sensor $sensor)
+    {
+        $this->sensor = $sensor;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +28,7 @@ class SensoresController extends Controller
     public function index()
     {
         // Obtener todos los usuarios
-        $sensores = Sensor::paginate(5);
+        $sensores = $this->sensor->paginate(5);
 
         // Carga la vista a la cual le pasa todos los sensores.
         return \View::make('panelUsuario.empleado.sensores.indiceSensores', compact('sensores'));
@@ -35,7 +42,7 @@ class SensoresController extends Controller
      */
     public function store(Request $request)
     {
-        $respuesta = Sensor::insertar($request);
+        $respuesta = $this->sensor->insertar($request);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha registrado exitosamente el sensor');
@@ -57,7 +64,7 @@ class SensoresController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $respuesta = Sensor::actualizar($request, $id);
+        $respuesta = $this->sensor->actualizar($request, $id);
         if ($respuesta["bandera"]) {
             // Session manda un mensaje de exito.
             Session::flash('message', 'Se ha modificado exitosamente el sensor');
@@ -78,7 +85,7 @@ class SensoresController extends Controller
      */
     public function destroy($id)
     {
-        Sensor::eliminar($id);
+        $this->sensor->eliminar($id);
         // Session manda un mensaje de exito.
         Session::flash('message', 'Se ha eliminado exitosamente el sensor');
         // Redireccionmiento.
